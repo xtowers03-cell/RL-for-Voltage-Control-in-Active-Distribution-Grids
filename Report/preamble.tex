@@ -1,0 +1,158 @@
+% !TEX root = main.tex
+% =========================================================================
+% PREAMBLE — Master Thesis Overleaf Template
+% Adapted from EMJM DREAM laboratory report styling for report class
+% =========================================================================
+
+% --- Typography, Encoding, and Romanian Diacritics ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{combelow}
+\DeclareUnicodeCharacter{0218}{\cb{S}}
+\DeclareUnicodeCharacter{0219}{\cb{s}}
+\DeclareUnicodeCharacter{021A}{\cb{T}}
+\DeclareUnicodeCharacter{021B}{\cb{t}}
+
+\usepackage{amsmath}
+\usepackage{newtxtext,newtxmath} % Times New Roman clone for text & math (do not load amssymb)
+\usepackage{microtype}
+\usepackage{siunitx}
+\sisetup{detect-all}
+
+% --- Page Setup ---
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    top=2.2cm,
+    bottom=2.2cm,
+    left=2.2cm,
+    right=2.2cm,
+    headheight=15pt
+}
+
+% --- Spacing ---
+\usepackage{setspace}
+\setstretch{1.25}
+
+% --- Graphics and Floats ---
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{placeins}
+\usepackage{float}
+
+% --- Colors and Visual Elements ---
+\usepackage[table]{xcolor}
+\definecolor{navyblue}{RGB}{20, 45, 95}
+\definecolor{darkslate}{RGB}{40, 50, 60}
+\definecolor{lightgrey}{RGB}{245, 247, 250}
+\definecolor{accentgreen}{RGB}{34, 139, 34}
+\definecolor{accentred}{RGB}{178, 34, 34}
+\definecolor{headerblue}{RGB}{24, 76, 120}
+
+% --- Chapter, Section, and Subsection Formatting ---
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]
+  {\normalfont}
+  {\fontsize{11pt}{14pt}\selectfont\bfseries\color{darkslate}\MakeUppercase{\chaptertitlename}~\thechapter}
+  {0.3ex}
+  {\fontsize{18pt}{22pt}\selectfont\bfseries\color{headerblue}}
+  [{\vspace{0.5ex}\color{headerblue}\titlerule[1.0pt]}]
+
+\titlespacing*{\chapter}
+  {0pt}
+  {0pt}
+  {3.5ex}
+
+\titleformat{\section}
+  {\fontsize{14pt}{17pt}\selectfont\bfseries\color{headerblue}}
+  {\thesection}
+  {1em}
+  {}
+  [{\vspace{0.4ex}\color{headerblue}\titlerule[0.8pt]}]
+
+\titlespacing*{\section}
+  {0pt}
+  {2.2ex plus 0.5ex minus 0.2ex}
+  {1.2ex plus 0.4ex minus 0.2ex}
+
+\titleformat{\subsection}
+  {\fontsize{12.5pt}{16pt}\selectfont\bfseries\color{darkslate}}
+  {\thesubsection}
+  {1em}
+  {}
+
+\titlespacing*{\subsection}
+  {0pt}
+  {1.6ex plus 0.4ex minus 0.2ex}
+  {0.8ex plus 0.2ex}
+
+\titleformat{\subsubsection}
+  {\fontsize{11.5pt}{15pt}\selectfont\bfseries\color{darkslate}}
+  {\thesubsubsection}
+  {1em}
+  {}
+
+% --- Header and Footer ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textit{EMJM DREAM --- Master Thesis}}
+\fancyhead[R]{\small\textit{\nouppercase{\leftmark}}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Clean footer on chapter-opening pages
+\fancypagestyle{plain}{
+    \fancyhf{}
+    \fancyfoot[C]{\thepage}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0.4pt}
+}
+
+% --- Tables, Lists, Algorithms, and Callout Boxes ---
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\usepackage{enumitem}
+\setlist{itemsep=2pt, topsep=3pt, leftmargin=1.5em}
+
+\usepackage{mdframed}
+\newmdenv[
+    backgroundcolor=lightgrey,
+    linecolor=navyblue,
+    linewidth=1.2pt,
+    topline=false,
+    rightline=false,
+    bottomline=false,
+    innerleftmargin=12pt,
+    innerrightmargin=12pt,
+    innertopmargin=8pt,
+    innerbottommargin=8pt,
+    skipabove=8pt,
+    skipbelow=8pt
+]{highlightbox}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{cite}
+
+% --- Hyperlinks (Load last) ---
+\usepackage[
+    colorlinks=true,
+    linkcolor=navyblue,
+    citecolor=navyblue,
+    urlcolor=navyblue,
+    pdftitle={Reinforcement Learning for Decentralized Voltage Regulation in the IEEE 13-Node Feeder Distribution Grid},
+    pdfauthor={Xavier Gonzalez Torres}
+]{hyperref}
+
+% --- Float control parameters ---
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.70}

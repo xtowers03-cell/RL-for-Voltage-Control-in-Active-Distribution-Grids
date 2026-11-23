@@ -1,0 +1,56 @@
+# --- LaTeX temporary & build files ---
+*.aux
+*.bbl
+*.blg
+*.lof
+*.log
+*.lot
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.xdv
+*.bcf
+*.run.xml
+*.idx
+*.ind
+*.ilg
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
+
+# --- Compiled thesis output & packages ---
+Report/main.pdf
+Report/Master_Thesis_Overleaf.zip
+
+# --- Copyrighted literature PDFs (keep Markdown summaries tracked) ---
+References/*.pdf
+
+# --- Python / RL / MATLAB / Simulink generated files ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+runs/
+wandb/
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.slxc
+slprj/
+
+# --- OS & Office temporary files ---
+~$*
+Thumbs.db
+Desktop.ini
+.DS_Store

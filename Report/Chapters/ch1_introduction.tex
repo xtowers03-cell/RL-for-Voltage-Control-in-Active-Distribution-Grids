@@ -1,0 +1,36 @@
+% !TEX root = ../main.tex
+% =========================================================================
+% CHAPTER 1: INTRODUCTION
+% =========================================================================
+\chapter{Introduction}
+\label{ch:introduction}
+
+\section{Background and Motivation}
+The growing integration of distributed photovoltaic (PV) inverters into medium- and low-voltage distribution networks introduces severe voltage regulation challenges worldwide~\cite{IEEE1547_2018,Mughni2026}. In conventional distribution feeders, voltage management relies primarily on manual or slow mechanical adjustments of on-load tap changers (OLTCs) and switched capacitor banks~\cite{Moutis2018,Satsangi2022}. However, rapid fluctuations in solar irradiance and bidirectional power flows create fast local over- and under-voltage excursions that mechanical devices cannot effectively mitigate.
+
+Smart PV inverters—capable of injecting or absorbing reactive power $Q_g(t)$ (and, if necessary, curtailing active power $P_g(t)$) at their points of common coupling—offer fast, continuous voltage support~\cite{IEEE1547_2018}. Operating within the Dynamic Virtual Power Plant (DVPP) paradigm~\cite{Marinescu2022,Haberle2023,Schulte2026}, distributed inverter resources can be coordinated at the supervisory layer while keeping inner converter control loops decoupled and internally stable.
+
+\section{Problem Statement}
+Purely local control rules, such as standard IEEE~1547-2018 Volt-VAR droop curves, often fail to resolve voltage violations once individual inverters saturate and can even produce counterproductive reactive injections across coupled buses~\cite{Ortmann2020,Satsangi2022}. Conversely, centralized optimal power flow (OPF) and centralized reinforcement learning (RL) approaches require continuous all-bus telemetry, introducing communication bottlenecks and privacy or scalability limitations~\cite{Chen2022,Chan2026}. Furthermore, distribution feeders exhibit comparable line resistance and reactance ($R/X$ ratios near unity), invalidating classical transmission-level $P$--$Q$ decoupling~\cite{Chen2022,Mughni2026}.
+
+\section{Research Objectives}
+The overarching objective of this thesis is to design, train, and benchmark a scalable, hardware-safe decentralized RL framework for supervisory voltage regulation on the modified IEEE 13-node feeder distribution grid~\cite{Mughni2026,Schulte2026}.
+
+\begin{highlightbox}
+\textbf{Core Research Objectives:}
+\begin{enumerate}[noitemsep, topsep=2pt]
+    \item Formulate a physically constrained supervisory RL pipeline that enforces each inverter's circular apparent power rating ($S_{g,\text{rated}}$) by construction while keeping all active and passive bus voltages within $0.95\text{--}1.05\text{ p.u.}$
+    \item Design a low-communication decentralized control policy under the Centralized Training with Decentralized Execution (CTDE) paradigm operating strictly on normalized local and immediate neighbor measurements.
+    \item Evaluate policy network depth (from linear/shallow models to deeper and graph-based architectures) and benchmark decentralized RL against centralized RL, IEEE~1547-2018 Volt-VAR droop, optimization-based baselines~\cite{Mughni2026,Ortmann2020}, and an exact AC-OPF upper bound.
+\end{enumerate}
+\end{highlightbox}
+
+\section{Thesis Outline}
+The remainder of this thesis is structured as follows:
+\begin{itemize}
+    \item \textbf{Chapter~\ref{ch:literature_review}} reviews classical and distributed voltage regulation methods, safe and multi-agent RL in active distribution grids, and empirical benchmarking standards.
+    \item \textbf{Chapter~\ref{ch:system_modeling}} presents the modified IEEE 13-node feeder topology, inverter supervisory abstraction, and simulation environment.
+    \item \textbf{Chapter~\ref{ch:rl_methodology}} details the MDP formulation, normalized observation space, hard action scaling, composite reward design, CTDE training architecture, and progressive warm-start pipeline.
+    \item \textbf{Chapter~\ref{ch:results}} reports simulation benchmarks, network depth ablations, and robustness evaluations under unseen load and generation disturbances.
+    \item \textbf{Chapter~\ref{ch:conclusion}} summarizes key contributions, discusses limitations and threats to validity, and outlines directions for future work.
+\end{itemize}

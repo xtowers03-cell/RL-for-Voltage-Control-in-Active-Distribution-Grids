@@ -1,0 +1,33 @@
+% !TEX root = ../main.tex
+% =========================================================================
+% CHAPTER 3: SYSTEM MODELING AND TEST GRID
+% =========================================================================
+\chapter{System Modeling and Test Grid}
+\label{ch:system_modeling}
+
+\section{Modified IEEE 13-Node Feeder Architecture}
+This thesis builds on the modified 4.16~kV IEEE 13-node distribution feeder established in~\cite{Schulte2026,Mughni2026}. The feeder connects to an equivalent transmission grid at the Point of Common Coupling (Bus~632) and integrates four inverter-based solar PV systems via 4.16~kV/480~V step-up transformers:
+\begin{itemize}
+    \item \textbf{Active Inverter Buses ($\mathcal{G}$, 4 nodes):} \texttt{Bus 634}, \texttt{Bus 672}, \texttt{Bus 675}, and \texttt{Bus 680}.
+    \item \textbf{Passive Load Buses ($\mathcal{P} \setminus \mathcal{G}$, 8 nodes):} \texttt{Bus 611}, \texttt{Bus 632}, \texttt{Bus 645}, \texttt{Bus 646}, \texttt{Bus 652}, \texttt{Bus 671}, \texttt{Bus 684}, and \texttt{Bus 692}.
+\end{itemize}
+
+% TODO: Insert single-line diagram of the modified IEEE 13-node feeder once cleaned Simulink model is received from HTW Berlin.
+
+\section{Supervisory Inverter Abstraction and Physical Constraints}
+Consistent with~\cite{Schulte2026,Mughni2026}, inner current and voltage loops of the voltage source converters (VSCs) are assumed internally stable and well-damped. The reinforcement learning controller operates strictly at the supervisory layer, issuing reactive power setpoints $Q_g(t)$ (and active power curtailment $P_g(t) \le P_{g,\text{avail}}(t)$ only as a last resort).
+
+Each inverter $g \in \mathcal{G}$ must obey its circular apparent power capability at every control step:
+\begin{equation}
+    |Q_g(t)| \le \sqrt{S_{g,\text{rated}}^2 - P_g(t)^2}
+    \label{eq:apparent_power_limit}
+\end{equation}
+All monitored active and passive buses $p \in \mathcal{P}$ are required to remain within statutory voltage limits:
+\begin{equation}
+    0.95\text{ p.u.} \le V_p(t) \le 1.05\text{ p.u.}, \quad \forall p \in \mathcal{P}
+    \label{eq:voltage_limits}
+\end{equation}
+
+\section{Two-Stage Simulation Workflow}
+% TODO: Document steady-state parity check (< 1e-4 p.u.) between Python quasi-static replica (pandapower / OpenDSS) and HTW Berlin MATLAB/Simulink dynamic model.
+To enable rapid multi-seed RL training and policy architecture ablations, a fast quasi-static Python power-flow replica is calibrated against HTW Berlin's MATLAB/Simulink dynamic model, followed by dynamic validation of trained weights in Simulink under disturbance events~\cite{Mughni2026}.

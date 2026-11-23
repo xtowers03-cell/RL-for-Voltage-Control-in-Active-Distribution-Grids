@@ -1,0 +1,58 @@
+% !TEX root = ../main.tex
+% =========================================================================
+% NOMENCLATURE
+% =========================================================================
+\chapter*{Nomenclature}
+\addcontentsline{toc}{chapter}{Nomenclature}
+
+\section*{Abbreviations}
+\noindent
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\textbf{Abbreviation} & \textbf{Description} \\
+\midrule
+AC-OPF & Alternating Current Optimal Power Flow \\
+ADPF   & Adaptive Dynamic Participation Factor \\
+CTDE   & Centralized Training with Decentralized Execution \\
+DER    & Distributed Energy Resource \\
+DVPP   & Dynamic Virtual Power Plant \\
+IBR    & Inverter-Based Resource \\
+MAPPO  & Multi-Agent Proximal Policy Optimization \\
+MASAC  & Multi-Agent Soft Actor-Critic \\
+MATD3  & Multi-Agent Twin Delayed Deep Deterministic Policy Gradient \\
+MDP    & Markov Decision Process \\
+MLP    & Multilayer Perceptron \\
+OFO    & Online Feedback Optimization \\
+OLTC   & On-Load Tap Changer \\
+PCC    & Point of Common Coupling \\
+PV     & Photovoltaic \\
+RL     & Reinforcement Learning \\
+SAC    & Soft Actor-Critic \\
+TD3    & Twin Delayed Deep Deterministic Policy Gradient \\
+VSC    & Voltage Source Converter \\
+\bottomrule
+\end{tabularx}
+
+\vspace{1.5em}
+\section*{Mathematical Symbols}
+\noindent
+\begin{tabularx}{\textwidth}{@{}l X@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} \\
+\midrule
+$\mathcal{P}$ & Set of all monitored active and passive buses in the distribution grid \\
+$\mathcal{G}$ & Set of active PV inverter agents ($\mathcal{G} \subset \mathcal{P}$) \\
+$\mathcal{N}_g$ & Set of immediate electrical neighbor buses observed by agent $g$ \\
+$V_p(t)$ & Per-unit voltage magnitude at bus $p \in \mathcal{P}$ at step $t$ [p.u.] \\
+$\tilde{V}_p(t)$ & Centered and normalized bus voltage, $(V_p(t) - 1.0) / 0.05$ \\
+$P_g(t),\ Q_g(t)$ & Active and reactive power injection setpoints of inverter $g$ [kW, kvar] \\
+$P_{g,\text{avail}}(t)$ & Available active PV power of inverter $g$ before curtailment [kW] \\
+$S_{g,\text{rated}}$ & Rated apparent power capacity of inverter $g$ [kVA] \\
+$o_g(t)$ & Local and neighbor observation vector of inverter agent $g$ \\
+$\tilde{a}_g(t)$ & Normalized policy action output in $[-1, 1]$ \\
+$r_t$ & Scalar step-by-step reinforcement learning reward \\
+$R_{\text{viol}}(t)$ & Primary network-wide voltage violation penalty (deadband MSE + $L_\infty$) \\
+$R_{\text{cost}}(t)$ & Secondary operational cost on reactive power effort and curtailment \\
+$w_1, w_2, \alpha, \lambda$ & Reward weighting and penalty hyperparameters \\
+\bottomrule
+\end{tabularx}

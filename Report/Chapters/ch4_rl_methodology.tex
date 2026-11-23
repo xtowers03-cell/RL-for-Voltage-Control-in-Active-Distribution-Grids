@@ -1,0 +1,43 @@
+% !TEX root = ../main.tex
+% =========================================================================
+% CHAPTER 4: REINFORCEMENT LEARNING METHODOLOGY
+% =========================================================================
+\chapter{Reinforcement Learning Methodology}
+\label{ch:rl_methodology}
+
+\section{Decentralized Observation Space}
+To minimize wide-area communication overhead and ensure scalability, each active inverter agent $g \in \mathcal{G}$ observes only normalized local measurements and immediate electrical neighbor voltages $j \in \mathcal{N}_g$ during online execution~\cite{Ortmann2020,Jacob2024}:
+\begin{equation}
+    o_g(t) = \left[\ \tilde{V}_g(t),\ \{\tilde{V}_j(t)\}_{j \in \mathcal{N}_g},\ \frac{P_g(t)}{S_{g,\text{rated}}},\ \frac{Q_g(t-1)}{S_{g,\text{rated}}},\ \frac{\sqrt{S_{g,\text{rated}}^2 - P_g(t)^2}}{S_{g,\text{rated}}}\ \right]
+    \label{eq:obs_vector}
+\end{equation}
+where voltages are centered and scaled onto $[-1, 1]$ over the compliant deadband via $\tilde{V}_k(t) = (V_k(t) - 1.0) / 0.05$, and all power terms are normalized by the inverter's rated apparent power $S_{g,\text{rated}}$.
+
+\section{Hard Apparent Power Constraint by Construction}
+Instead of penalizing apparent power violations softly in the reward, each policy network outputs a normalized reactive command $\tilde{a}_{g,Q}(t) \in [-1, 1]$ via a $\tanh$ activation, directly scaled by the instantaneous reactive headroom:
+\begin{equation}
+    Q_g(t) = \tilde{a}_{g,Q}(t) \cdot \sqrt{S_{g,\text{rated}}^2 - P_g(t)^2}
+    \label{eq:action_scaling}
+\end{equation}
+This guarantees $P_g(t)^2 + Q_g(t)^2 \le S_{g,\text{rated}}^2$ identically during random exploration, training, and deployment. When active curtailment is enabled, $P_g(t) = \tilde{a}_{g,P}(t) P_{g,\text{avail}}(t)$ with $\tilde{a}_{g,P}(t) \in [0, 1]$ is computed prior to~\eqref{eq:action_scaling}.
+
+\section{Composite Reward Design}
+At each control interval $t$, the scalar reward balances network-wide voltage compliance against operational effort~\cite{Chen2022,Jacob2024,Wang2026}:
+\begin{equation}
+    r_t = -\left(w_1 R_{\text{viol}}(t) + w_2 R_{\text{cost}}(t)\right), \qquad w_1 \gg w_2
+    \label{eq:total_reward}
+\end{equation}
+The primary voltage penalty combines a mean-squared deadband term over all buses $p \in \mathcal{P}$ with an $L_\infty$ worst-bus peak term to protect remote passive nodes:
+\begin{equation}
+    R_{\text{viol}}(t) = \frac{1}{|\mathcal{P}|}\sum_{p\in\mathcal{P}} \left[\max(0, V_p(t)-1.05)^2 + \max(0, 0.95-V_p(t))^2\right] + \alpha \max_{p\in\mathcal{P}}\!\left(\max(0, V_p(t)-1.05) + \max(0, 0.95-V_p(t))\right)
+    \label{eq:r_viol}
+\end{equation}
+The secondary operational cost minimizes reactive circulation and penalizes active curtailment:
+\begin{equation}
+    R_{\text{cost}}(t) = \frac{1}{|\mathcal{G}|}\sum_{g\in\mathcal{G}}\left(\frac{Q_g(t)}{S_{g,\text{rated}}}\right)^2 + \lambda \frac{1}{|\mathcal{G}|}\sum_{g\in\mathcal{G}}\frac{P_{g,\text{avail}}(t) - P_g(t)}{P_{g,\text{rated}}}
+    \label{eq:r_cost}
+\end{equation}
+
+\section{CTDE Architecture, Progressive Training, and Network Depth}
+% TODO: Detail 1-agent OPF/BC warm-start -> TD3/SAC -> MATD3/MASAC/MAPPO scaling, safety filter / CMDP extensions [Chan2026], and optional state observer for unmeasured passive nodes [Simon2006].
+Under the CTDE paradigm~\cite{Chen2022}, offline training employs a centralized critic $Q_w(s_{\text{global}}, \mathbf{a})$ observing all active and passive bus voltages $p \in \mathcal{P}$, while online execution deploys decentralized actors $\pi_{\theta_g}(o_g)$. To investigate the required model complexity~\cite{Stradowski2023}, four policy tiers are evaluated: classical droop, linear/single-layer policies, compact two-layer MLPs, and deeper/graph-based architectures~\cite{Jacob2024}.

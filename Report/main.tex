@@ -1,0 +1,56 @@
+% =========================================================================
+% MASTER THESIS — MAIN DOCUMENT
+% Reinforcement Learning for Decentralized Voltage Regulation in the
+% IEEE 13-Node Feeder Distribution Grid
+% =========================================================================
+\documentclass[11pt,a4paper]{report}
+
+\input{preamble}
+
+\begin{document}
+
+% --- Cover / Title Page ---
+\input{Frontmatter/titlepage}
+
+% --- Front Matter (Roman numerals) ---
+\clearpage
+\pagenumbering{roman}
+\pagestyle{plain}
+
+\input{Frontmatter/abstract}
+\input{Frontmatter/acknowledgments}
+
+\tableofcontents
+\clearpage
+
+\listoffigures
+\clearpage
+
+\listoftables
+\clearpage
+
+\input{Frontmatter/nomenclature}
+
+% --- Main Matter (Arabic numerals) ---
+\clearpage
+\pagenumbering{arabic}
+\pagestyle{fancy}
+
+\input{Chapters/ch1_introduction}
+\input{Chapters/ch2_literature_review}
+\input{Chapters/ch3_system_modeling}
+\input{Chapters/ch4_rl_methodology}
+\input{Chapters/ch5_results}
+\input{Chapters/ch6_conclusion}
+
+% --- Bibliography ---
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% --- Appendices ---
+\appendix
+\input{Chapters/appendix}
+
+\end{document}

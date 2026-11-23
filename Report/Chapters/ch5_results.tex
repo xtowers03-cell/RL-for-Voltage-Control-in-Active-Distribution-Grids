@@ -1,0 +1,45 @@
+% !TEX root = ../main.tex
+% =========================================================================
+% CHAPTER 5: SIMULATION RESULTS AND BENCHMARKING
+% =========================================================================
+\chapter{Simulation Results and Benchmarking}
+\label{ch:results}
+
+\section{Experimental Setup and Evaluation Metrics}
+% TODO: Fill in exact training/testing splits (e.g., non-overlapping seasonal/irradiance profiles [Wang2026]), disturbance scenarios (Mashhood load/voltage steps [Mughni2026] & solar cloud transients [Schulte2026]), and multi-seed setup (>= 5 seeds).
+All controllers are evaluated using standardized key performance indicators (KPIs):
+\begin{itemize}[noitemsep, topsep=2pt]
+    \item Voltage violation rate (\% of steps outside $0.95\text{--}1.05\text{ p.u.}$ across all active and passive buses).
+    \item Worst-bus peak deviation ($\max_{p,t} |V_p(t) - 1.0|$) and steady-state RMSE~\cite{Mughni2026}.
+    \item Total reactive power effort, active power losses, online inference time (ms), and training wall-clock time.
+\end{itemize}
+
+\section{Benchmarking Against Centralized RL and Classical Baselines}
+Table~\ref{tab:benchmark_template} outlines the quantitative comparison across all baseline and RL controllers.
+
+\begin{table}[!htbp]
+\centering
+\caption{Benchmark Comparison Across Voltage Control Strategies (Template)}
+\label{tab:benchmark_template}
+\small
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{lYYYYY}
+\toprule
+\textbf{Control Method} & \textbf{Viol.\ Rate [\%]} & \textbf{Max $|V - 1|$ [p.u.]} & \textbf{Mean $Q$ Effort} & \textbf{Comm.\ Overhead} & \textbf{Inference [ms]} \\
+\midrule
+Uncontrolled ($Q = 0$) & --- & --- & 0.00 & None & --- \\
+IEEE 1547-2018 Droop~\cite{IEEE1547_2018,Satsangi2022} & --- & --- & --- & None & --- \\
+\texttt{LS\_V} / \texttt{RLS\_V}~\cite{Mughni2026} & --- & --- & --- & Global & --- \\
+\texttt{D\_V} Distributed OFO~\cite{Mughni2026,Ortmann2020} & --- & --- & --- & Neighbor ($\mu$) & --- \\
+Centralized RL (SAC/TD3) & --- & --- & --- & Global & --- \\
+Decentralized CTDE RL (Proposed) & --- & --- & --- & Local + Neighbor & --- \\
+Centralized AC-OPF (Upper Bound) & --- & --- & --- & Global & --- \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Policy Network Depth Ablation}
+% TODO: Report 4-tier ablation results (Droop -> Linear/Shallow -> 2-layer MLP -> Deep MLP / K-hop GNN).
+
+\section{Robustness Under Unseen Disturbances and Model Mismatch}
+% TODO: Evaluate Simulink dynamic validation, forecast/measurement noise, and parameter mismatch perturbations [Chan2026,Wang2026], plus state-observer impact on passive buses if required.
