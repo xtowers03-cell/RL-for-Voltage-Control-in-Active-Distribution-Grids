@@ -44,7 +44,6 @@
 \usepackage[table]{xcolor}
 \definecolor{navyblue}{RGB}{20, 45, 95}
 \definecolor{darkslate}{RGB}{40, 50, 60}
-\definecolor{lightgrey}{RGB}{245, 247, 250}
 \definecolor{accentgreen}{RGB}{34, 139, 34}
 \definecolor{accentred}{RGB}{178, 34, 34}
 \definecolor{headerblue}{RGB}{24, 76, 120}
@@ -61,8 +60,8 @@
 
 \titlespacing*{\chapter}
   {0pt}
-  {0pt}
-  {3.5ex}
+  {-0.5cm}
+  {3.0ex}
 
 \titleformat{\section}
   {\fontsize{14pt}{17pt}\selectfont\bfseries\color{headerblue}}
@@ -73,8 +72,8 @@
 
 \titlespacing*{\section}
   {0pt}
-  {2.2ex plus 0.5ex minus 0.2ex}
-  {1.2ex plus 0.4ex minus 0.2ex}
+  {2.6ex plus 0.5ex minus 0.2ex}
+  {2.2ex plus 0.4ex minus 0.2ex}
 
 \titleformat{\subsection}
   {\fontsize{12.5pt}{16pt}\selectfont\bfseries\color{darkslate}}
@@ -85,13 +84,24 @@
 \titlespacing*{\subsection}
   {0pt}
   {1.6ex plus 0.4ex minus 0.2ex}
-  {0.8ex plus 0.2ex}
+  {1.2ex plus 0.2ex}
 
 \titleformat{\subsubsection}
   {\fontsize{11.5pt}{15pt}\selectfont\bfseries\color{darkslate}}
   {\thesubsubsection}
   {1em}
   {}
+
+% --- Table of Contents Styling ---
+\usepackage[titles]{tocloft}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\cftchapfont}{\bfseries\color{navyblue}}
+\renewcommand{\cftchappagefont}{\bfseries\color{navyblue}}
+\setlength{\cftbeforechapskip}{0.45em}
+\renewcommand{\cftsecfont}{\normalfont\color{black}}
+\renewcommand{\cftsecpagefont}{\normalfont\color{black}}
+\renewcommand{\cftsubsecfont}{\normalfont\color{black}}
+\renewcommand{\cftsubsecpagefont}{\normalfont\color{black}}
 
 % --- Header and Footer ---
 \usepackage{fancyhdr}
@@ -111,7 +121,7 @@
     \renewcommand{\footrulewidth}{0.4pt}
 }
 
-% --- Tables, Lists, Algorithms, and Callout Boxes ---
+% --- Tables, Lists, and Algorithms ---
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{array}
@@ -120,22 +130,6 @@
 
 \usepackage{enumitem}
 \setlist{itemsep=2pt, topsep=3pt, leftmargin=1.5em}
-
-\usepackage{mdframed}
-\newmdenv[
-    backgroundcolor=lightgrey,
-    linecolor=navyblue,
-    linewidth=1.2pt,
-    topline=false,
-    rightline=false,
-    bottomline=false,
-    innerleftmargin=12pt,
-    innerrightmargin=12pt,
-    innertopmargin=8pt,
-    innerbottommargin=8pt,
-    skipabove=8pt,
-    skipbelow=8pt
-]{highlightbox}
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}

@@ -6,31 +6,30 @@
 \label{ch:introduction}
 
 \section{Background and Motivation}
-The growing integration of distributed photovoltaic (PV) inverters into medium- and low-voltage distribution networks introduces severe voltage regulation challenges worldwide~\cite{IEEE1547_2018,Mughni2026}. In conventional distribution feeders, voltage management relies primarily on manual or slow mechanical adjustments of on-load tap changers (OLTCs) and switched capacitor banks~\cite{Moutis2018,Satsangi2022}. However, rapid fluctuations in solar irradiance and bidirectional power flows create fast local over- and under-voltage excursions that mechanical devices cannot effectively mitigate.
+Driven by decarbonization targets and transmission grid capacity constraints, power systems are shifting from centralized synchronous generation toward inverter-based distributed energy resources (DERs) such as solar photovoltaic (PV), wind, and battery storage. Connecting these units across medium- and low-voltage feeders is transforming traditionally passive, one-way grids into active distribution networks.
 
-Smart PV inverters—capable of injecting or absorbing reactive power $Q_g(t)$ (and, if necessary, curtailing active power $P_g(t)$) at their points of common coupling—offer fast, continuous voltage support~\cite{IEEE1547_2018}. Operating within the Dynamic Virtual Power Plant (DVPP) paradigm~\cite{Marinescu2022,Haberle2023,Schulte2026}, distributed inverter resources can be coordinated at the supervisory layer while keeping inner converter control loops decoupled and internally stable.
+In these active feeders, keeping nodal voltages within statutory bounds (typically 0.95 to 1.05~p.u.) has become a primary barrier to renewable hosting capacity~\cite{Satsangi2022,Mughni2026}. Surplus local generation drives reverse power flows and overvoltages, whereas sudden weather transients or demand peaks cause sharp voltage drops. Conventional mechanical regulators, such as on-load tap changers (OLTCs) and switched capacitor banks, operate too slowly to track these fast excursions and suffer accelerated wear under frequent switching~\cite{Moutis2018,Satsangi2022}.
+
+Under modern grid codes such as IEEE~Std~1547-2018~\cite{IEEE1547_2018}, smart inverters provide fast, continuous voltage support by adjusting reactive power and curtailing active power only as a last resort~\cite{Satsangi2022,Mughni2026}. Within the Dynamic Virtual Power Plant (DVPP) paradigm~\cite{Marinescu2022,Haberle2023,Schulte2026}, coordinating these converters at a supervisory layer enables network-wide voltage regulation while leaving fast inner converter loops locally stable.
+
+However, dispatching dispersed inverters in real time becomes increasingly difficult with conventional model-based methods as distribution feeders grow more complex, uncertain, and nonlinear~\cite{Ortmann2020,Chen2022}. Reinforcement learning (RL) offers a compelling data-driven alternative by shifting heavy computation offline: agents learn adaptive control policies through interaction with a grid simulator and execute supervisory setpoints in milliseconds during live operation~\cite{Chen2022,Jacob2024,Chan2026}. Developing safe, scalable decentralized RL strategies for supervisory voltage support is therefore the central motivation of this thesis.
 
 \section{Problem Statement}
-Purely local control rules, such as standard IEEE~1547-2018 Volt-VAR droop curves, often fail to resolve voltage violations once individual inverters saturate and can even produce counterproductive reactive injections across coupled buses~\cite{Ortmann2020,Satsangi2022}. Conversely, centralized optimal power flow (OPF) and centralized reinforcement learning (RL) approaches require continuous all-bus telemetry, introducing communication bottlenecks and privacy or scalability limitations~\cite{Chen2022,Chan2026}. Furthermore, distribution feeders exhibit comparable line resistance and reactance ($R/X$ ratios near unity), invalidating classical transmission-level $P$--$Q$ decoupling~\cite{Chen2022,Mughni2026}.
+Existing inverter-based voltage regulation strategies face a fundamental trade-off between coordination and scalability. Purely local control rules, such as Volt-VAR droop curves, fail to resolve violations once individual inverters saturate, remain blind to remote passive buses, and can even induce counterproductive reactive flows across coupled nodes~\cite{Ortmann2020,Satsangi2022}. Conversely, centralized optimal power flow (OPF) relies on network-wide real-time measurements, introducing communication bottlenecks, single-point-of-failure risks, and scalability limits~\cite{Chen2022,Chan2026}.
+
+Beyond control architecture, distribution feeders impose strict physical and observability constraints. Unlike transmission lines, distribution feeders exhibit high resistance-to-reactance ($R/X$) ratios, invalidating classical active--reactive decoupling and tightly coupling renewable power swings with bus voltages~\cite{Chen2022,Mughni2026}. In addition, most load nodes are passive and unmonitored in real time, yet every bus must stay within statutory voltage limits without exceeding each inverter's apparent power rating~\cite{Mughni2026}.
+
+Although RL has gained growing attention for distribution voltage control, key deployment gaps remain unresolved. Most existing RL approaches still assume centralized execution, use soft penalties that fail to guarantee hard inverter limits, or add computationally expensive online optimization layers to guarantee safety~\cite{Chen2022,Chan2026}. Moreover, the trade-off between policy complexity and real-time performance is rarely benchmarked systematically against classical, distributed, and OPF controllers~\cite{Stradowski2023,Mughni2026}. 
 
 \section{Research Objectives}
-The overarching objective of this thesis is to design, train, and benchmark a scalable, hardware-safe decentralized RL framework for supervisory voltage regulation on the modified IEEE 13-node feeder distribution grid~\cite{Mughni2026,Schulte2026}.
+The main objective of this thesis is to design, train, and benchmark a scalable, hardware-safe decentralized RL framework for supervisory voltage regulation on a modified IEEE 13-node test feeder with four photovoltaic inverters. Operating strictly at the supervisory layer above assumed-stable inner converter control loops, this work pursues four specific objectives:
 
-\begin{highlightbox}
-\textbf{Core Research Objectives:}
-\begin{enumerate}[noitemsep, topsep=2pt]
-    \item Formulate a physically constrained supervisory RL pipeline that enforces each inverter's circular apparent power rating ($S_{g,\text{rated}}$) by construction while keeping all active and passive bus voltages within $0.95\text{--}1.05\text{ p.u.}$
-    \item Design a low-communication decentralized control policy under the Centralized Training with Decentralized Execution (CTDE) paradigm operating strictly on normalized local and immediate neighbor measurements.
-    \item Evaluate policy network depth (from linear/shallow models to deeper and graph-based architectures) and benchmark decentralized RL against centralized RL, IEEE~1547-2018 Volt-VAR droop, optimization-based baselines~\cite{Mughni2026,Ortmann2020}, and an exact AC-OPF upper bound.
+\begin{enumerate}[itemsep=4pt, topsep=4pt]
+    \item \textbf{Physically constrained supervisory formulation:} Formulate a supervisory RL control problem that guarantees each inverter's apparent power rating by construction, prioritizing reactive power support over active power curtailment while keeping all active and passive bus voltages within statutory limits (0.95 to 1.05~p.u.).
+
+    \item \textbf{Low-communication decentralized execution:} Design a decentralized control policy under the Centralized Training with Decentralized Execution (CTDE) paradigm that uses full network observability during offline training while operating online solely from local and immediate neighbor measurements.
+
+    \item \textbf{Policy complexity and benchmarking:} Investigate how policy complexity, from lightweight linear and shallow models to deeper neural networks, affects regulation performance, and benchmark decentralized RL against non-learning baselines (local Volt-VAR droop, as well as centralized and distributed optimization-based controllers) and centralized RL.
+
+    \item \textbf{Robustness and real-time feasibility:} Verify voltage compliance and control effort under unseen load, renewable generation, and upstream voltage disturbances, while confirming fast online inference times suitable for real-time supervisory deployment.
 \end{enumerate}
-\end{highlightbox}
-
-\section{Thesis Outline}
-The remainder of this thesis is structured as follows:
-\begin{itemize}
-    \item \textbf{Chapter~\ref{ch:literature_review}} reviews classical and distributed voltage regulation methods, safe and multi-agent RL in active distribution grids, and empirical benchmarking standards.
-    \item \textbf{Chapter~\ref{ch:system_modeling}} presents the modified IEEE 13-node feeder topology, inverter supervisory abstraction, and simulation environment.
-    \item \textbf{Chapter~\ref{ch:rl_methodology}} details the MDP formulation, normalized observation space, hard action scaling, composite reward design, CTDE training architecture, and progressive warm-start pipeline.
-    \item \textbf{Chapter~\ref{ch:results}} reports simulation benchmarks, network depth ablations, and robustness evaluations under unseen load and generation disturbances.
-    \item \textbf{Chapter~\ref{ch:conclusion}} summarizes key contributions, discusses limitations and threats to validity, and outlines directions for future work.
-\end{itemize}

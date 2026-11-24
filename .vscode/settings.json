@@ -56,5 +56,9 @@
     "*.fls",
     "*.fdb_latexmk",
     "*.synctex.gz"
-  ]
+  ],
+  "latex-workshop.formatting.latex": "none",
+  "[latex]": {
+    "editor.formatOnSave": false
+  }
 }

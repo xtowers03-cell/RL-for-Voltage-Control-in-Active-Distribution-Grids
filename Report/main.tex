@@ -20,13 +20,17 @@
 \input{Frontmatter/abstract}
 \input{Frontmatter/acknowledgments}
 
-\tableofcontents
+{\hypersetup{hidelinks}\setstretch{1.05}\tableofcontents}
 \clearpage
 
-\listoffigures
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Figures}
+{\hypersetup{linkcolor=black}\setstretch{1.08}\listoffigures}
 \clearpage
 
-\listoftables
+\phantomsection
+\addcontentsline{toc}{chapter}{List of Tables}
+{\hypersetup{linkcolor=black}\setstretch{1.08}\listoftables}
 \clearpage
 
 \input{Frontmatter/nomenclature}
